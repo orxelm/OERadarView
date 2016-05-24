@@ -8,11 +8,46 @@
 
 import UIKit
 
+@IBDesignable
 public class OERadarView: UIView {
+    
+    /// The circle's fill color
+    @IBInspectable
+    public var circleFillColor: UIColor = .redColor() {
+        didSet {
+            self.setNeedsLayout()
+        }
+    }
+    
+    /// The circle's border fill color
+    @IBInspectable
+    public var circleBorderColor: UIColor = .redColor() {
+        didSet {
+            self.setNeedsLayout()
+        }
+    }
+    
+    /// The center point color
+    @IBInspectable
+    public var centerPointColor: UIColor = .redColor() {
+        didSet {
+            self.setNeedsLayout()
+        }
+    }
+    
+    /// The center point color
+    @IBInspectable
+    public var radiusLineColor: UIColor = .redColor() {
+        didSet {
+            self.setNeedsLayout()
+        }
+    }
     
     private var centerPoint: CGPoint {
         return CGPoint(x: self.bounds.width/2, y: self.bounds.height/2)
     }
+    
+    // MARK: - UIView
     
     public override func layoutSubviews() {
         super.layoutSubviews()
@@ -22,28 +57,26 @@ public class OERadarView: UIView {
         let circlePath = UIBezierPath.circlePathWithCenter(self.centerPoint, diameter: circleSize - 2, borderWidth: 1)
         let circleShape = CAShapeLayer()
         circleShape.path = circlePath.CGPath
-        circleShape.fillColor = UIColor.redColor().colorWithAlphaComponent(0.35).CGColor
-        circleShape.strokeColor = UIColor.redColor().CGColor
+        circleShape.fillColor = self.circleFillColor.colorWithAlphaComponent(0.35).CGColor
+        circleShape.strokeColor = self.circleBorderColor.CGColor
         self.layer.addSublayer(circleShape)
         
         // Center point circle
         let centerPointPath = UIBezierPath.circlePathWithCenter(self.centerPoint, diameter: 4, borderWidth: 0)
         let pointShape = CAShapeLayer()
         pointShape.path = centerPointPath.CGPath
-        pointShape.fillColor = UIColor.redColor().CGColor
+        pointShape.fillColor = self.centerPointColor.CGColor
         circleShape.addSublayer(pointShape)
         
         // Line radius
         let linePath = UIBezierPath()
-        let frame = CGRect(x: self.centerPoint.x-circleSize/2, y: 0, width: circleSize, height: circleSize)
         linePath.moveToPoint(CGPoint(x: circleSize/2, y: circleSize/2))
         linePath.addLineToPoint(CGPoint(x: circleSize/2, y: 0))
         
         let lineShape = CAShapeLayer()
-        lineShape.frame = frame
+        lineShape.frame = CGRect(x: self.centerPoint.x-circleSize/2, y: 0, width: circleSize, height: circleSize)
         lineShape.path = linePath.CGPath
-        lineShape.strokeColor = UIColor.redColor().CGColor
-        lineShape.fillColor = UIColor.redColor().CGColor
+        lineShape.strokeColor = self.radiusLineColor.CGColor
         lineShape.lineWidth = 1
         circleShape.addSublayer(lineShape)
         
