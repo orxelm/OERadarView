@@ -19,7 +19,7 @@ public class OERadarView: UIView {
         }
     }
     
-    /// The circle's border fill color
+    /// The circle's border (stroke) color
     @IBInspectable
     public var circleBorderColor: UIColor = .redColor() {
         didSet {
@@ -35,7 +35,7 @@ public class OERadarView: UIView {
         }
     }
     
-    /// The center point color
+    /// The radius line color
     @IBInspectable
     public var radiusLineColor: UIColor = .redColor() {
         didSet {
