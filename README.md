@@ -25,7 +25,7 @@ self.view.addSubview(radarView)
 ````
 
 ## Properties
-
+```swift
 /// The circle's fill color
 public var circleFillColor: UIColor
     
@@ -37,6 +37,7 @@ public var centerPointColor: UIColor
     
 /// The radius line color
 public var radiusLineColor: UIColor
+```
 
 ##Author
 OERadarView is owned and maintained by Or Elmaliah. You can follow me on Twitter [@OrElm](https://twitter.com/orelm).
