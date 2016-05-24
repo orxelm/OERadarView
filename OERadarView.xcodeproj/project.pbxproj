@@ -79,9 +79,8 @@
 		790FD24E1CF44D9B00C48C0D /* OERadarView */ = {
 			isa = PBXGroup;
 			children = (
+				790FD2731CF4864C00C48C0D /* Example */,
 				790FD26F1CF44DEB00C48C0D /* Source */,
-				790FD2511CF44D9B00C48C0D /* ViewController.swift */,
-				790FD2531CF44D9B00C48C0D /* Main.storyboard */,
 				790FD2701CF44DF100C48C0D /* Resources */,
 			);
 			path = OERadarView;
@@ -113,6 +112,15 @@
 				790FD25B1CF44D9B00C48C0D /* Info.plist */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		790FD2731CF4864C00C48C0D /* Example */ = {
+			isa = PBXGroup;
+			children = (
+				790FD2511CF44D9B00C48C0D /* ViewController.swift */,
+				790FD2531CF44D9B00C48C0D /* Main.storyboard */,
+			);
+			name = Example;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

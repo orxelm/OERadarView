@@ -54,7 +54,8 @@ public class OERadarView: UIView {
         
         // Big Circle
         let circleSize = min(self.bounds.width, self.bounds.height)
-        let circlePath = UIBezierPath.circlePathWithCenter(self.centerPoint, diameter: circleSize - 2, borderWidth: 1)
+        let borderWidth: CGFloat = 1
+        let circlePath = UIBezierPath.circlePathWithCenter(self.centerPoint, diameter: circleSize - 2*borderWidth, borderWidth: borderWidth)
         let circleShape = CAShapeLayer()
         circleShape.path = circlePath.CGPath
         circleShape.fillColor = self.circleFillColor.colorWithAlphaComponent(0.35).CGColor
@@ -68,7 +69,7 @@ public class OERadarView: UIView {
         pointShape.fillColor = self.centerPointColor.CGColor
         circleShape.addSublayer(pointShape)
         
-        // Line radius
+        // Radius line
         let linePath = UIBezierPath()
         linePath.moveToPoint(CGPoint(x: circleSize/2, y: circleSize/2))
         linePath.addLineToPoint(CGPoint(x: circleSize/2, y: 0))
@@ -80,6 +81,7 @@ public class OERadarView: UIView {
         lineShape.lineWidth = 1
         circleShape.addSublayer(lineShape)
         
+        // Radius line animation
         let circleAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
         circleAnimation.fromValue = NSNumber(double: 0)
         circleAnimation.toValue = NSNumber(double: 2*M_PI)
