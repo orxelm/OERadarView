@@ -117,6 +117,7 @@ public class OERadarView: UIView {
             
             CATransaction.begin()
             CATransaction.setCompletionBlock {
+                dotShape.removeFromSuperlayer()
                 self.showRandomDotShape()
             }
             
