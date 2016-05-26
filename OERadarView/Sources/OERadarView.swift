@@ -111,8 +111,11 @@ public class OERadarView: UIView {
             
             let dotPath = UIBezierPath.circlePathWithCenter(dotPoint, diameter: 5, borderWidth: 0)
             let dotShape = CAShapeLayer()
+            dotShape.frame = CGRect(x: dotPoint.x-2.5, y: dotPoint.y-2.5, width: 5, height: 5)
             dotShape.path = dotPath.CGPath
             dotShape.fillColor = self.centerPointColor.CGColor
+            dotShape.borderColor = UIColor.greenColor().CGColor
+            dotShape.borderWidth = 5
             circleShape.addSublayer(dotShape)
             
             CATransaction.begin()
@@ -125,8 +128,12 @@ public class OERadarView: UIView {
             alphaAnimation.fromValue = 1
             alphaAnimation.toValue = 0
             
+            let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
+            scaleAnimation.fromValue = NSNumber(double: 1)
+            scaleAnimation.toValue = NSNumber(double: 2)
+            
             let animation = CAAnimationGroup()
-            animation.animations = [alphaAnimation]
+            animation.animations = [alphaAnimation, scaleAnimation]
             animation.duration = 2.0
             animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
             animation.removedOnCompletion = false
