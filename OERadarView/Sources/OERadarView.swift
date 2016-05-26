@@ -43,6 +43,8 @@ public class OERadarView: UIView {
         }
     }
     
+    private var circleShape: CAShapeLayer?
+    private var radiusLineShape: CAShapeLayer?
     private var centerPoint: CGPoint {
         return CGPoint(x: self.bounds.width/2, y: self.bounds.height/2)
     }
@@ -61,6 +63,7 @@ public class OERadarView: UIView {
         circleShape.fillColor = self.circleFillColor.colorWithAlphaComponent(0.35).CGColor
         circleShape.strokeColor = self.circleBorderColor.CGColor
         self.layer.addSublayer(circleShape)
+        self.circleShape = circleShape
         
         // Center point circle
         let centerPointPath = UIBezierPath.circlePathWithCenter(self.centerPoint, diameter: 4, borderWidth: 0)
@@ -74,12 +77,13 @@ public class OERadarView: UIView {
         linePath.moveToPoint(CGPoint(x: circleSize/2, y: circleSize/2))
         linePath.addLineToPoint(CGPoint(x: circleSize/2, y: 0))
         
-        let lineShape = CAShapeLayer()
-        lineShape.frame = CGRect(x: self.centerPoint.x-circleSize/2, y: 0, width: circleSize, height: circleSize)
-        lineShape.path = linePath.CGPath
-        lineShape.strokeColor = self.radiusLineColor.CGColor
-        lineShape.lineWidth = 1
-        circleShape.addSublayer(lineShape)
+        let radiusLineShape = CAShapeLayer()
+        radiusLineShape.frame = CGRect(x: self.centerPoint.x-circleSize/2, y: 0, width: circleSize, height: circleSize)
+        radiusLineShape.path = linePath.CGPath
+        radiusLineShape.strokeColor = self.radiusLineColor.CGColor
+        radiusLineShape.lineWidth = 1
+        circleShape.addSublayer(radiusLineShape)
+        self.radiusLineShape = radiusLineShape
         
         // Radius line animation
         let circleAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
@@ -89,9 +93,48 @@ public class OERadarView: UIView {
         circleAnimation.duration = 2
         circleAnimation.repeatCount = Float.infinity
         circleAnimation.removedOnCompletion = false
-        lineShape.addAnimation(circleAnimation, forKey: nil)
+        radiusLineShape.addAnimation(circleAnimation, forKey: nil)
+        
+        self.showRandomDotShape()
     }
-
+    
+    private func showRandomDotShape() {
+        if let radiusLineShape = self.radiusLineShape, circleShape = self.circleShape, circleShapePath = circleShape.path {
+            
+            var dotPoint = CGPointZero
+            let circleBezierPath = UIBezierPath(CGPath: circleShapePath)
+            while !circleBezierPath.containsPoint(dotPoint) {
+                let dotX = CGFloat.random(radiusLineShape.frame.minX, radiusLineShape.frame.maxX)
+                let dotY = CGFloat.random(radiusLineShape.frame.minY, radiusLineShape.frame.maxY)
+                dotPoint = CGPoint(x: dotX, y: dotY)
+            }
+            
+            let dotPath = UIBezierPath.circlePathWithCenter(dotPoint, diameter: 5, borderWidth: 0)
+            let dotShape = CAShapeLayer()
+            dotShape.path = dotPath.CGPath
+            dotShape.fillColor = self.centerPointColor.CGColor
+            circleShape.addSublayer(dotShape)
+            
+            CATransaction.begin()
+            CATransaction.setCompletionBlock {
+                self.showRandomDotShape()
+            }
+            
+            let alphaAnimation = CABasicAnimation(keyPath: "opacity")
+            alphaAnimation.fromValue = 1
+            alphaAnimation.toValue = 0
+            
+            let animation = CAAnimationGroup()
+            animation.animations = [alphaAnimation]
+            animation.duration = 2.0
+            animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+            animation.removedOnCompletion = false
+            
+            dotShape.addAnimation(animation, forKey: nil)
+            dotShape.opacity = 0
+            CATransaction.commit()
+        }
+    }
 }
 
 extension UIBezierPath {
@@ -99,5 +142,11 @@ extension UIBezierPath {
         let path = UIBezierPath(arcCenter: center, radius: diameter/2, startAngle: 0, endAngle: 2*CGFloat(M_PI), clockwise: true)
         path.lineWidth = borderWidth
         return path
+    }
+}
+
+extension CGFloat {
+    static func random(lower: CGFloat = 0, _ upper: CGFloat = 1) -> CGFloat {
+        return CGFloat(Float(arc4random()) / Float(UINT32_MAX)) * (upper - lower) + lower
     }
 }
