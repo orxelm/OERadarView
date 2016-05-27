@@ -4,6 +4,10 @@
 
 Simple custom UIView subclass that adds a Radar view to your application. A radar view consisting of a big circle in the middle and a rotating radius line inside.
 
+## Demo
+![Demo](https://raw.githubusercontent.com/orxelm/OERadarView/master/assets/oeradarview.gif)
+
+
 ## Installation
 ### CocoaPods (Soon)
 
