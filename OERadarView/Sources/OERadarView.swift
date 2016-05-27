@@ -109,11 +109,14 @@ public class OERadarView: UIView {
                 dotPoint = CGPoint(x: dotX, y: dotY)
             }
             
-            let dotPath = UIBezierPath.circlePathWithCenter(dotPoint, diameter: 5, borderWidth: 0)
+            let dotSize: CGFloat = 5
             let dotShape = CAShapeLayer()
-            dotShape.path = dotPath.CGPath
+            dotShape.frame = CGRect(x: dotPoint.x-dotSize/2, y: dotPoint.y-dotSize/2, width: dotSize, height: dotSize)
             dotShape.fillColor = self.centerPointColor.CGColor
+            dotShape.cornerRadius = dotSize/2
             circleShape.addSublayer(dotShape)
+            dotShape.borderColor = self.centerPointColor.CGColor
+            dotShape.borderWidth = dotSize
             
             CATransaction.begin()
             CATransaction.setCompletionBlock {
@@ -125,8 +128,12 @@ public class OERadarView: UIView {
             alphaAnimation.fromValue = 1
             alphaAnimation.toValue = 0
             
+            let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
+            scaleAnimation.fromValue = NSNumber(double: 0.5)
+            scaleAnimation.toValue = NSNumber(double: 2)
+            
             let animation = CAAnimationGroup()
-            animation.animations = [alphaAnimation]
+            animation.animations = [alphaAnimation, scaleAnimation]
             animation.duration = 2.0
             animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
             animation.removedOnCompletion = false
@@ -137,6 +144,8 @@ public class OERadarView: UIView {
         }
     }
 }
+
+// MARK: - Extension
 
 extension UIBezierPath {
     class func circlePathWithCenter(center: CGPoint, diameter: CGFloat, borderWidth: CGFloat) -> UIBezierPath {
